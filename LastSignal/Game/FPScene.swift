@@ -144,11 +144,11 @@ struct DarknessProfile {
     static func forFloor(_ floor: Int) -> DarknessProfile {
         switch floor {
         case 1:
-            return DarknessProfile(percent: 80, ambientIntensity: 42, fogStart: 3.0, fogEnd: 18)
+            return DarknessProfile(percent: 80, ambientIntensity: 80, fogStart: 5, fogEnd: 26)
         case 2:
-            return DarknessProfile(percent: 87, ambientIntensity: 26, fogStart: 2.5, fogEnd: 13.5)
+            return DarknessProfile(percent: 87, ambientIntensity: 55, fogStart: 4, fogEnd: 20)
         case 3:
-            return DarknessProfile(percent: 94, ambientIntensity: 12, fogStart: 2.0, fogEnd: 9.5)
+            return DarknessProfile(percent: 94, ambientIntensity: 38, fogStart: 3, fogEnd: 15)
         case 4: // the roof at dawn — you can finally see
             return DarknessProfile(percent: 25, ambientIntensity: 210, fogStart: 10, fogEnd: 55)
         default:
@@ -255,17 +255,32 @@ enum FPSceneFactory {
         let spot = SCNLight()
         spot.type = .spot
         spot.color = UIColor(red: 1.0, green: 0.95, blue: 0.85, alpha: 1)
-        spot.intensity = 450
+        spot.intensity = 1500
         spot.attenuationStartDistance = 0.5
-        spot.attenuationEndDistance = 18
-        spot.spotOuterAngle = 38
-        spot.spotInnerAngle = 38 * 0.3
+        spot.attenuationEndDistance = 30
+        spot.spotOuterAngle = 55
+        spot.spotInnerAngle = 55 * 0.55
         spot.castsShadow = true
         spot.shadowMapSize = CGSize(width: 1024, height: 1024)
         spot.shadowColor = UIColor.black.withAlphaComponent(0.9)
         spotNode.light = spot
         spotNode.position = SCNVector3(0.12, -0.08, 0.05)
         cameraNode.addChildNode(spotNode)
+
+        // A whisper of fill light at the camera, so nearby geometry
+        // is never a pure-black void around the flashlight cone (the
+        // first build's hard white disc on black — «الضوء سيء كلش»).
+        // Far too dim to matter for stealth: the sight hunter reads
+        // the flashlight's on/off state, never this fill.
+        let fillNode = SCNNode()
+        let fill = SCNLight()
+        fill.type = .omni
+        fill.color = UIColor(red: 0.85, green: 0.9, blue: 1.0, alpha: 1)
+        fill.intensity = 14
+        fill.attenuationStartDistance = 0.3
+        fill.attenuationEndDistance = 7
+        fillNode.light = fill
+        cameraNode.addChildNode(fillNode)
 
         // One pathfinding grid per floor: monsters route around the
         // walls (plus the locked entry door) to track the player.
