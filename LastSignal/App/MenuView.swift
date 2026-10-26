@@ -47,7 +47,7 @@ struct MenuView: View {
                         startCinematic()
                     } label: {
                         Text("ابدأ")
-                            .font(.title2.black())
+                            .font(.system(.title2, weight: .black))
                             .foregroundStyle(Color(red: 0.96, green: 0.79, blue: 0.36))
                             .frame(width: 168, height: 62)
                             .menuTile(fill: darkFill)

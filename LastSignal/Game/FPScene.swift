@@ -258,8 +258,8 @@ enum FPSceneFactory {
         spot.intensity = 450
         spot.attenuationStartDistance = 0.5
         spot.attenuationEndDistance = 18
-        spot.spotAngle = 38
-        spot.spotPenumbra = 0.7
+        spot.spotOuterAngle = 38
+        spot.spotInnerAngle = 38 * 0.3
         spot.castsShadow = true
         spot.shadowMapSize = CGSize(width: 1024, height: 1024)
         spot.shadowColor = UIColor.black.withAlphaComponent(0.9)
@@ -599,7 +599,6 @@ enum FPSceneFactory {
                 length: CGFloat(zone.rect.height), chamferRadius: 0))
             floor.geometry?.materials = [floorMaterial(for: zone.surface)]
             floor.position = SCNVector3(Float(zone.rect.midX), -0.05, Float(zone.rect.midY))
-            floor.receivesShadow = true
             floor.name = "floor_\(zone.name)"
             scene.rootNode.addChildNode(floor)
 
@@ -666,7 +665,6 @@ enum FPSceneFactory {
             wall.geometry?.materials = [wallMaterial]
             wall.position = SCNVector3(
                 Float(rect.midX), Float(level.wallHeight) / 2, Float(rect.midY))
-            wall.receivesShadow = true
             scene.rootNode.addChildNode(wall)
         }
 
@@ -1064,8 +1062,8 @@ final class FPSceneController: NSObject, SCNSceneRendererDelegate {
         if !doorLocked, player.position.y > level.entryDoorRect.midY + 1.2 {
             doorLocked = true
             let targetX = Float(level.entryDoorRect.midX)
-            entryDoor.runAction(SCNAction.moveTo(
-                x: CGFloat(targetX), y: 1.3, z: CGFloat(level.entryDoorRect.midY),
+            entryDoor.runAction(SCNAction.move(
+                to: SCNVector3(targetX, 1.3, Float(level.entryDoorRect.midY)),
                 duration: 0.5))
             let doorPos = CGPoint(x: level.entryDoorRect.midX, y: level.entryDoorRect.midY)
             AudioManager.shared.play(.doorSlam, at: doorPos)
@@ -1382,13 +1380,16 @@ final class FPSceneController: NSObject, SCNSceneRendererDelegate {
         switch flashLevel {
         case .steady:
             spotLight.intensity = 450
-            spotLight.spotAngle = 38
+            spotLight.spotOuterAngle = 38
+            spotLight.spotInnerAngle = 38 * 0.3
         case .strong:
             spotLight.intensity = 850
-            spotLight.spotAngle = 52
+            spotLight.spotOuterAngle = 52
+            spotLight.spotInnerAngle = 52 * 0.3
         case .flash:
             spotLight.intensity = strobeHigh ? 450 : 25
-            spotLight.spotAngle = 38
+            spotLight.spotOuterAngle = 38
+            spotLight.spotInnerAngle = 38 * 0.3
         }
     }
 
