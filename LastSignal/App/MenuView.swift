@@ -125,9 +125,11 @@ struct MenuView: View {
             .environment(\.layoutDirection, .rightToLeft)
         }
         .onAppear {
+            requestLandscapeOrientation()
             AudioManager.shared.playLooped(.menuAmbience, volume: 0.4)
             artZoom = true
         }
+        .landscapeRoot()
         .task {
             await lightningLoop()
         }

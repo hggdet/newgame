@@ -182,7 +182,11 @@ struct FPGameView: View {
                 }
             }
         }
-        .onAppear { model.startIfNeeded(floor: startFloor) }
+        .onAppear {
+            requestLandscapeOrientation()
+            model.startIfNeeded(floor: startFloor)
+        }
+        .landscapeRoot()
     }
 
     private var winOverlay: some View {
