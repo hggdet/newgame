@@ -42,8 +42,7 @@ struct ErrorView: View {
                             .font(.headline)
                             .padding(.horizontal, 20)
                             .padding(.vertical, 10)
-                            .background(Color.white.opacity(0.15))
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .glassPill()
                     }
 
                     Button {
@@ -53,8 +52,7 @@ struct ErrorView: View {
                             .font(.headline)
                             .padding(.horizontal, 20)
                             .padding(.vertical, 10)
-                            .background(Color.red.opacity(0.7))
-                            .clipShape(RoundedRectangle(cornerRadius: 10))
+                            .glassPill(tint: .red)
                     }
                 }
                 .foregroundStyle(.white)

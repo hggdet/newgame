@@ -28,6 +28,7 @@ enum Sound: String, CaseIterable {
     case breathGasp = "breath_gasp"
     case heartbeat = "heartbeat"
     case transmissionHum = "transmission_hum"
+    case signalSent = "signal_sent"
     case transmissionDone = "transmission_done"
     case survivorCry = "survivor_cry"
     case survivorRescued = "survivor_rescued"
@@ -36,6 +37,21 @@ enum Sound: String, CaseIterable {
     case uiTap = "ui_tap"
     case gameOverSting = "gameover_sting"
     case endingSting = "ending_sting"
+    case stickSwing = "stick_swing"
+    case stickHit = "stick_hit"
+    case breakWood = "break_wood"
+    case breakGlass = "break_glass"
+    case codeDigitFound = "code_digit_found"
+    case doorLock = "door_lock"
+    case doorUnlock = "door_unlock"
+    case keypadBeep = "keypad_beep"
+    case sightHunterScreech = "sighthunter_screech"
+    case generatorCrank = "generator_crank"
+    case generatorOn = "generator_on"
+    case metalClank = "metal_clank"
+    case sparkZap = "spark_zap"
+    case menuAmbience = "amb_station"
+    case thunder = "thunder"
 }
 
 // Directional audio on AVAudioEngine + AVAudioEnvironmentNode (3D).
@@ -47,6 +63,7 @@ final class AudioManager {
     private let engine = AVAudioEngine()
     private let environment = AVAudioEnvironmentNode()
     private var bufferCache: [String: AVAudioPCMBuffer] = [:]
+    private var loopNode: AVAudioPlayerNode?
     private(set) var isAvailable = false
 
     var volume: Float {
@@ -135,6 +152,31 @@ final class AudioManager {
             }
         }
         node.play()
+    }
+
+    // Looping playback on a dedicated node (menu ambience). Starting
+    // it again replaces whatever looped before; stopLooped ends it.
+    // Missing file / unavailable engine: silent no-op.
+    func playLooped(_ sound: Sound, volume level: Float = 0.5) {
+        guard isAvailable, engine.isRunning else { return }
+        guard let buffer = loadBuffer(named: sound.rawValue) else { return }
+        stopLooped()
+        let node = AVAudioPlayerNode()
+        node.volume = min(max(level, 0), 1)
+        engine.attach(node)
+        engine.connect(node, to: environment, format: buffer.format)
+        node.scheduleBuffer(buffer, at: nil, options: .loops, completionHandler: nil)
+        node.play()
+        loopNode = node
+    }
+
+    func stopLooped() {
+        guard let node = loopNode else { return }
+        node.stop()
+        if node.engine != nil {
+            engine.detach(node)
+        }
+        loopNode = nil
     }
 
     private func loadBuffer(named name: String) -> AVAudioPCMBuffer? {
