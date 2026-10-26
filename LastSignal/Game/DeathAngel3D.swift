@@ -21,11 +21,13 @@ final class DeathAngel3D: MonsterBase3D {
     private var searchIndex = 0
 
     // Speeds (m/s). Fast and violent, but a sprint barely outruns it.
-    private let patrolSpeed: CGFloat = 1.05
-    private let investigateSpeed: CGFloat = 2.1
-    private let chaseSpeed: CGFloat = 2.92
-    private let searchSpeed: CGFloat = 1.3
-    private let returnSpeed: CGFloat = 2.3
+    // Scaled ×1.94 with the player's speed fix (0.2.1) so the chase
+    // balance against walk/run is unchanged.
+    private let patrolSpeed: CGFloat = 2.04
+    private let investigateSpeed: CGFloat = 4.07
+    private let chaseSpeed: CGFloat = 5.66
+    private let searchSpeed: CGFloat = 2.52
+    private let returnSpeed: CGFloat = 4.46
 
     init(spawn: CGPoint, waypoints: [CGPoint]) {
         self.spawnPosition = spawn.isSafeFinite ? spawn : .zero

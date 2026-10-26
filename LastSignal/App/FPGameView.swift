@@ -182,6 +182,13 @@ struct FPGameView: View {
                 }
             }
         }
+        // The HUD layout is positional, not textual: joystick belongs
+        // bottom-LEFT, action buttons bottom-RIGHT, look-drag on the
+        // right side. Under the app's RTL environment the stacks
+        // mirror and the controls land on the wrong sides (his
+        // on-device report: «خربطة»). Pin the game view to LTR
+        // layout; every label inside stays Arabic.
+        .environment(\.layoutDirection, .leftToRight)
         .onAppear {
             requestLandscapeOrientation()
             model.startIfNeeded(floor: startFloor)

@@ -21,10 +21,12 @@ final class LightHunter3D: MonsterBase3D {
     var lightDetectionRange: CGFloat = 9
     let darkDetectionRange: CGFloat = 1.2
 
-    private let patrolSpeed: CGFloat = 0.9
-    private let investigateSpeed: CGFloat = 1.55
-    private let chaseSpeed: CGFloat = 2.35
-    private let searchSpeed: CGFloat = 1.1
+    // Scaled ×1.94 with the player's speed fix (0.2.1), same reason
+    // as the sound hunter: chase balance against walk/run unchanged.
+    private let patrolSpeed: CGFloat = 1.75
+    private let investigateSpeed: CGFloat = 3.0
+    private let chaseSpeed: CGFloat = 4.56
+    private let searchSpeed: CGFloat = 2.13
 
     init(spawn: CGPoint, waypoints: [CGPoint]) {
         self.waypoints = waypoints.filter { $0.isSafeFinite }

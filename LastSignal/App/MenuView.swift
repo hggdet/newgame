@@ -49,7 +49,7 @@ struct MenuView: View {
                         Text("ابدأ")
                             .font(.system(.title2, weight: .black))
                             .foregroundStyle(Color(red: 0.96, green: 0.79, blue: 0.36))
-                            .frame(width: 168, height: 62)
+                            .frame(width: 176, height: 64)
                             .menuTile(fill: darkFill)
                     }
 
@@ -64,7 +64,7 @@ struct MenuView: View {
                                 Text("الإعدادات")
                                     .font(.subheadline.bold())
                                     .foregroundStyle(.white)
-                                    .frame(width: 78, height: 54)
+                                    .frame(width: 82, height: 56)
                                     .menuTile(fill: darkFill)
                             }
 
@@ -78,7 +78,7 @@ struct MenuView: View {
                                 Text("كيف ألعب؟")
                                     .font(.subheadline.bold())
                                     .foregroundStyle(.white)
-                                    .frame(width: 78, height: 54)
+                                    .frame(width: 82, height: 56)
                                     .menuTile(fill: darkFill)
                             }
                         }
@@ -211,10 +211,12 @@ struct MenuView: View {
     }
 
     // Simple dark tile fill (his choice: dark and plain, no white
-    // border, no bright colours).
+    // border, no bright colours). Kept dark but DENSE: the first
+    // build's 0.58/0.42 fill vanished into the dark key art on
+    // device and the buttons could not be seen at all.
     private var darkFill: LinearGradient {
         LinearGradient(
-            colors: [Color.black.opacity(0.58), Color.black.opacity(0.42)],
+            colors: [Color.black.opacity(0.88), Color.black.opacity(0.76)],
             startPoint: .top, endPoint: .bottom)
     }
 
